@@ -33,18 +33,30 @@ class _CalculatorState extends State<Calculator> {
   void _buttonPressed(String buttonText) {
     if (buttonText == 'C') {
       _clear();
+    } else if (buttonText == '⌫') {
+      _delete();
     } else if (buttonText == '+' || buttonText == '-' || buttonText == '*' || buttonText == '/') {
       _operand = buttonText;
-      _num1 = double.parse(_output);
+      _num1 = double.parse(_buffer.isEmpty ? '0' : _buffer);
       _buffer = '';
+      setState(() {
+        _output = buttonText;
+      });
     } else if (buttonText == '=') {
-      _num2 = double.parse(_output);
+      _num2 = double.parse(_buffer.isEmpty ? '0' : _buffer);
       _calculate();
+    } else if (buttonText == '.') {
+      if (!_buffer.contains('.')) {
+        setState(() {
+          _buffer += buttonText;
+          _output = _buffer;
+        });
+      }
     } else {
       setState(() {
         if (_buffer.length < 10) {
           _buffer += buttonText;
-          _output = double.parse(_buffer).toStringAsFixed(2);
+          _output = _buffer;
         }
       });
     }
@@ -69,7 +81,16 @@ class _CalculatorState extends State<Calculator> {
     setState(() {
       _output = result.toStringAsFixed(2);
       _operand = '';
-      _buffer = '';
+      _buffer = result.toString();
+    });
+  }
+
+  void _delete() {
+    setState(() {
+      if (_buffer.isNotEmpty) {
+        _buffer = _buffer.substring(0, _buffer.length - 1);
+        _output = _buffer.isEmpty ? '0' : _buffer;
+      }
     });
   }
 
@@ -96,11 +117,23 @@ class _CalculatorState extends State<Calculator> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            _output,
-            style: TextStyle(fontSize: 36),
+          Expanded(child: const Text(' ')),
+          Container(
+            padding: EdgeInsets.only(top:40, right: 20),
+            alignment: Alignment.centerRight,
+            child: Text(
+              _output,
+              style: TextStyle(fontSize: 48),
+            ),
           ),
-          SizedBox(height: 20),
+          Expanded(child: const Text(' ')),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildButton('C'),
+              _buildButton('⌫')
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -131,7 +164,7 @@ class _CalculatorState extends State<Calculator> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildButton('C'),
+              _buildButton('.'),
               _buildButton('0'),
               _buildButton('='),
               _buildButton('+'),
@@ -143,14 +176,27 @@ class _CalculatorState extends State<Calculator> {
   }
 
   Widget _buildButton(String buttonText) {
-    return ElevatedButton(
-      onPressed: () {
-        _buttonPressed(buttonText);
-      },
-      child: Text(
-        buttonText,
-        style: TextStyle(fontSize: 20),
+    return Expanded(
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0),
       ),
+      side: BorderSide(width: 2, color: Colors.blue),
+   ),
+        onPressed: () {
+          _buttonPressed(buttonText);
+        },
+        child: Text(
+        buttonText,
+        style: TextStyle(
+          fontSize: 32,
+          height: 3,
+          color: Colors.black,
+          letterSpacing:0,
+        ),
+        ),
+        ),
     );
-  }   
+  }
 }
