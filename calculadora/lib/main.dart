@@ -117,7 +117,7 @@ class _CalculatorState extends State<Calculator> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: const Text(' ')),
+          Expanded(child: Text(' ')),
           Container(
             padding: EdgeInsets.only(top:40, right: 20),
             alignment: Alignment.centerRight,
@@ -126,7 +126,7 @@ class _CalculatorState extends State<Calculator> {
               style: TextStyle(fontSize: 48),
             ),
           ),
-          Expanded(child: const Text(' ')),
+          Expanded(child: Text(' ')),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
