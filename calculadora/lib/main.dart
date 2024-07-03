@@ -18,7 +18,6 @@ class MainApp extends StatelessWidget {
 
 class Calculator extends StatefulWidget {
   const Calculator({Key? key}) : super(key: key);
-
   @override
   _CalculatorState createState() => _CalculatorState();
 }
