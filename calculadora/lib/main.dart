@@ -108,7 +108,7 @@ class _CalculatorState extends State<Calculator> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Calculadora',
           style: TextStyle(color: Colors.white),
         ),
